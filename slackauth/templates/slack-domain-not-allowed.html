@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Not allowed</h1>
+<p class="lead">You tried to register using {{ request.GET.domain}}.slack.com but this website only allows the following slack teams to register:</p>
+<ul>
+  {% for domain in settings.ALLOWED_SLACK_DOMAINS %}
+  <li>{{ domain }}.slack.com</li>
+  {% endfor %}
+</ul>
+<p>Please try to log in again using an appropriate slack service</p>
+{% endblock %}
