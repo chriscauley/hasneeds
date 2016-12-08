@@ -9,4 +9,5 @@
   <div class="close-tray mobile" onclick="$('nav').toggleClass('expanded');"></div>
   <a class="btn btn-primary" href="{% url "social:begin" "slack" %}?next={{ login_redirect }}">
       <i class="fa fa-slack"></i> Connect with Slack</a>
+  <auth-dropdown></auth-dropdown>
 </nav>
