@@ -31,6 +31,7 @@ TEMPLATES = [
         'django.template.context_processors.request',
         'django.template.context_processors.tz',
         'django.contrib.messages.context_processors.messages',
+        'lablackey.context.public_settings',
         #'social.apps.django_app.context_processors.backends',
         #'social.apps.django_app.context_processors.login_redirect',
       ],
@@ -41,9 +42,12 @@ TEMPLATES = [
 AUTHENTICATION_BACKENDS = (
   #'social.backends.google.GoogleOAuth2',
   #'social.backends.twitter.TwitterOAuth',
+  'social.backends.slack.SlackOAuth2',
   'lablackey.auth.EmailOrUsernameModelBackend',
   'django.contrib.auth.backends.ModelBackend',
 )
+
+SOCIAL_AUTH_SLACK_SCOPE = ['team:read']
 
 # Above comments are useful for social auth. Requires these keys in a private file
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ""
@@ -89,3 +93,22 @@ COMPRESS_PRECOMPILERS = [
 ]
 
 FAVICON = '/static/favicon.ico'
+
+SOCIAL_AUTH_PIPELINE = (
+  'social.pipeline.social_auth.social_details',
+  'social.pipeline.social_auth.social_uid',
+  'social.pipeline.social_auth.auth_allowed',
+  'social.pipeline.social_auth.social_user',
+  'social.pipeline.user.get_username',
+  'slackauth.views.get_team',
+  'social.pipeline.user.create_user',
+  'social.pipeline.social_auth.associate_user',
+  'social.pipeline.social_auth.load_extra_data',
+  'social.pipeline.user.user_details',
+)
+
+ALLOWED_SLACK_DOMAINS = [
+  'indyhall'
+]
+
+PUBLIC_SETTINGS = ['DEBUG','ALLOWED_SLACK_DOMAINS']

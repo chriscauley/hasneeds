@@ -6,6 +6,9 @@ from django.contrib.auth import urls as auth_urls
 from django.views.static import serve
 from main import views as main_views
 
+import social.apps.django_app.urls
+import slackauth.urls
+
 admin.autodiscover()
 
 urlpatterns = [
@@ -15,6 +18,8 @@ urlpatterns = [
   url(r'^$', main_views.home,name='home'),
   url(r'favicon.ico$', main_views.redirect,
       {'url': getattr(settings,'FAVICON','/static/favicon.png')}),
+  url('', include(social.apps.django_app.urls, namespace='social')),
+  url('',include(slackauth.urls)),
 ]
 
 if settings.DEBUG:

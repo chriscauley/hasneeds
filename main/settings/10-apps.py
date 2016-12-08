@@ -13,6 +13,8 @@ INSTALLED_APPS = (
   'crop_override',
   'sorl.thumbnail',
   'social.apps.django_app.default',
+  'lablackey',
+  'slackauth',
 )
 
 # Django Suit configuration example

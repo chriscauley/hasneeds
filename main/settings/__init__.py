@@ -3,10 +3,9 @@
 import os, sys, glob, re, socket
 
 pwd = os.path.dirname(__file__)
+PPATH = os.path.join(pwd,"../..")
 # This if fucking ugly!
-sys.path.append(os.path.join(pwd,'..'))
-sys.path.append(os.path.join(pwd,'..','..'))
-sys.path.append(os.path.join(pwd,'..','..','..'))
+sys.path.insert(0,os.path.normpath(os.path.join(PPATH,'.dev/')))
 
 # Open and compile each file
 machine_name = re.sub('[^A-z0-9._]', '_', socket.gethostname())

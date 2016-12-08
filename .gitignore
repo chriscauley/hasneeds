@@ -11,3 +11,4 @@ main/settings/local.py
 
 env/*
 .e/*
+.dev
