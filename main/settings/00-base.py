@@ -90,6 +90,7 @@ STATICFILES_FINDERS = (
 LESS_EXECUTABLE = 'lessc'
 COMPRESS_PRECOMPILERS = [
   ('text/less', "lessc {infile} {outfile} --line-numbers=comments;autoprefixer-cli {outfile} -o {outfile}"),
+  ('riot/tag', 'riot {infile} {outfile}'),
 ]
 
 FAVICON = '/static/favicon.ico'

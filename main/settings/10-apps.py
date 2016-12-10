@@ -15,6 +15,7 @@ INSTALLED_APPS = (
   'social.apps.django_app.default',
   'lablackey',
   'slackauth',
+  'board',
 )
 
 # Django Suit configuration example
