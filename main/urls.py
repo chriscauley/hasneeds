@@ -8,7 +8,8 @@ from main import views as main_views
 
 import social.apps.django_app.urls
 import slackauth.urls
-import lablackey.urls
+import lablackey.urls, lablackey.views
+from graphene_django.views import GraphQLView
 
 admin.autodiscover()
 
@@ -16,11 +17,12 @@ urlpatterns = [
   url(r'^admin/', include(admin.site.urls)),
   url(r'^auth/',include(auth_urls)),
 
-  url(r'^$', main_views.home,name='home'),
+  url(r'^(|post|tag|category)$', lablackey.views.single_page_app),
   url(r'favicon.ico$', main_views.redirect, {'url': getattr(settings,'FAVICON','/static/favicon.png')}),
   url('', include(social.apps.django_app.urls, namespace='social')),
   url('', include(slackauth.urls)),
   url('', include(lablackey.urls)),
+  url(r'^graphql', GraphQLView.as_view(graphiql=True)),
 ]
 
 if settings.DEBUG:

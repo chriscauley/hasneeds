@@ -113,3 +113,7 @@ ALLOWED_SLACK_DOMAINS = [
 ]
 
 PUBLIC_SETTINGS = ['DEBUG','ALLOWED_SLACK_DOMAINS']
+
+GRAPHENE = {
+    'SCHEMA': 'board.schema.schema',
+}
