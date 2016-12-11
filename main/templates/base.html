@@ -12,9 +12,9 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
     {% compress css %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/_materialize.css" />
     <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}less/base.less" />
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}unrest/.dist/unrest-built.css" />
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/_materialize.css" />
     {% endcompress %}
 
     <!--[if IE 7]>
@@ -34,20 +34,30 @@
         {% block nav %}{% include "_nav.html" %}{% endblock %}
         {% block header %}<h1>{% block header_content %}{% endblock %}</h1>{% endblock %}
       </header>
-      <div id="content">
+      <div id="wrapper">
         <div class="container">
           {% block messages %}{% include "_messages.html" %}{% endblock %}
         </div>
         {% block content_outer %}
-        <div class="container">
+        <div id="content" class="container">
           {% block content %}{% endblock %}
         </div>
         {% endblock %}
       </div>
       <footer id="footer">{% block footer %}{% include "_footer.html" %}{% endblock %}</footer>
+      <div id="alert-div"></div>
     </div>
   </body>
   <script src="https://cdn.jsdelivr.net/riot/2.5/riot+compiler.js"></script>
+  {% compress js %}
+  <script src="{{ STATIC_URL }}js/zepto.js"></script>
+  <script src="{{ STATIC_URL }}js/zepto-extras.js"></script>
+  <script src="{{ STATIC_URL }}js/data.js"></script>
+  <script src="{{ STATIC_URL }}tags/board.tag" type="riot/tag"></script>
+  <script>window.jQuery = $;</script>
   <script src="{{ STATIC_URL }}unrest/.dist/unrest-built.js"></script>
   <script src="{{ STATIC_URL }}js/init.js"></script>
+  {% endcompress %}
+</script>
+
 </html>
