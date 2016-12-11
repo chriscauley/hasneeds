@@ -24,6 +24,7 @@ urlpatterns = [
   url('', include(slackauth.urls)),
   url('', include(lablackey.urls)),
   url('^api/board/tags/$',board.views.tags),
+  url('^api/board/tag/new/$',board.views.add_tag),
 ]
 
 if settings.DEBUG:
