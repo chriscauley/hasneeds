@@ -7,4 +7,5 @@ sorl-thumbnail
 pillow
 
 python-social-auth
-graphene-django
+#graphene-django
+#django-filter

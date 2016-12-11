@@ -9,7 +9,7 @@ INSTALLED_APPS = (
   'django.contrib.messages',
   'django.contrib.staticfiles',
 
-  'graphene_django',
+  #'graphene_django',
   'compressor',
   'crop_override',
   'sorl.thumbnail',
