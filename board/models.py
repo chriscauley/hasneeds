@@ -8,6 +8,7 @@ import jsonfield
 
 class Category(models.Model):
   name = models.CharField(max_length=64,unique=True)
+  json_fields = ['name','id']
   __unicode__ = lambda self: self.name
   class Meta:
     ordering = ("name",)
@@ -19,6 +20,7 @@ class TagManager(models.Manager):
     return super(TagManager,self).get(*args,**kwargs)
 
 class Tag(models.Model):
+  json_fields = ['name','id']
   name = models.CharField(max_length=64,unique=True)
   categories = models.ManyToManyField(Category)
   _ht = "Non-approved tags may be deleted if they aren't up to standards."
@@ -32,6 +34,7 @@ class Tag(models.Model):
     ordering = ("name",)
 
 class Post(models.Model):
+  json_fields = ['name','id','tag_ids', 'data']
   name = models.CharField(max_length=256)
   tags = models.ManyToManyField(Tag)
   categories = models.ManyToManyField(Category)
@@ -41,5 +44,7 @@ class Post(models.Model):
   closed = models.DateTimeField(null=True,blank=True)
   data = jsonfield.JSONField(default={})
   __unicode__ = lambda self: self.name
+  tag_ids = property(lambda self: list(self.tags.values_list("id",flat=True)))
+  category_ids = property(lambda self: list(self.categories.values_list("id",flat=True)))
   class Meta:
     ordering = ("-created",)
