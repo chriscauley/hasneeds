@@ -14,3 +14,12 @@ uR.schema.fields.tags = {
   type: 'token-input',
   library: "/api/board/tags/",
 }
+uR.schema.fields.categories = {
+  type: 'select',
+  choices_url: "/durf/board/category/",
+  value_key: 'id',
+  verbose_key: 'name',
+  placeholder: 'Select Category',
+}
+
+uR.startRouter();

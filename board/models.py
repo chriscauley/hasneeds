@@ -50,5 +50,6 @@ class Post(models.Model,JsonMixin):
   category_ids = property(lambda self: list(self.categories.values_list("id",flat=True)))
   tag_names = property(lambda self: list(self.tags.values_list("name",flat=True)))
   category_names = property(lambda self: list(self.categories.values_list("name",flat=True)))
+  get_absolute_url = lambda self: "/post/%s/%s/"%(self.pk,slugify(self.name))
   class Meta:
     ordering = ("-created",)

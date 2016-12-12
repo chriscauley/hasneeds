@@ -12,9 +12,11 @@ def add_tag(request):
   return JsonResponse(t.as_json)
 
 def add_post(request):
-  data = {k:request.POST[k] for k in ['categories','tags','name','description'] if k in request.POST}
   post = Post.objects.create(
     user=request.user,
-    **data
+    name=request.POST['name']
   )
-  return JsonResponse({'ur_route_to': post.get_absoluet_url()})
+  post.data['description'] = request.POST['description']
+  post.tags = request.POST['tags']
+  post.categories = request.POST['categories']
+  return JsonResponse({'ur_route_to': post.get_absolute_url()})
