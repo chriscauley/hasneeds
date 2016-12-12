@@ -6,7 +6,9 @@ from django.template.defaultfilters import slugify
 
 import jsonfield
 
-class Category(models.Model):
+from lablackey.unrest import JsonMixin
+
+class Category(models.Model,JsonMixin):
   name = models.CharField(max_length=64,unique=True)
   json_fields = ['name','id']
   __unicode__ = lambda self: self.name
@@ -19,7 +21,7 @@ class TagManager(models.Manager):
       kwargs['name'] = slugify(kwargs['name'])
     return super(TagManager,self).get(*args,**kwargs)
 
-class Tag(models.Model):
+class Tag(models.Model,JsonMixin):
   json_fields = ['name','id']
   name = models.CharField(max_length=64,unique=True)
   categories = models.ManyToManyField(Category)
@@ -33,8 +35,8 @@ class Tag(models.Model):
   class Meta:
     ordering = ("name",)
 
-class Post(models.Model):
-  json_fields = ['name','id','tag_ids', 'data']
+class Post(models.Model,JsonMixin):
+  json_fields = ['name','id','tag_ids', 'data', 'category_ids', 'tag_names', 'category_names']
   name = models.CharField(max_length=256)
   tags = models.ManyToManyField(Tag)
   categories = models.ManyToManyField(Category)
@@ -46,5 +48,7 @@ class Post(models.Model):
   __unicode__ = lambda self: self.name
   tag_ids = property(lambda self: list(self.tags.values_list("id",flat=True)))
   category_ids = property(lambda self: list(self.categories.values_list("id",flat=True)))
+  tag_names = property(lambda self: list(self.tags.values_list("name",flat=True)))
+  category_names = property(lambda self: list(self.categories.values_list("name",flat=True)))
   class Meta:
     ordering = ("-created",)
