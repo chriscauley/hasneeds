@@ -109,7 +109,8 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 ALLOWED_SLACK_DOMAINS = [
-  'indyhall'
+  'indyhall',
+  #'txrxlabs',
 ]
 
 PUBLIC_SETTINGS = ['DEBUG','ALLOWED_SLACK_DOMAINS']

@@ -38,7 +38,6 @@ class Tag(models.Model,JsonMixin):
     ordering = ("name",)
 
 class Post(models.Model,JsonMixin):
-  json_fields = ['name','id','tag_ids', 'data', 'category_ids', 'tag_names', 'category_names']
   name = models.CharField(max_length=256)
   tags = models.ManyToManyField(Tag)
   categories = models.ManyToManyField(Category)
@@ -48,10 +47,13 @@ class Post(models.Model,JsonMixin):
   closed = models.DateTimeField(null=True,blank=True)
   data = jsonfield.JSONField(default={})
   __unicode__ = lambda self: self.name
+
+  json_fields = ['name','id','tag_ids', 'data', 'category_ids', 'tag_names', 'category_names', 'username']
   tag_ids = property(lambda self: list(self.tags.values_list("id",flat=True)))
   category_ids = property(lambda self: list(self.categories.values_list("id",flat=True)))
   tag_names = property(lambda self: list(self.tags.values_list("name",flat=True)))
   category_names = property(lambda self: list(self.categories.values_list("name",flat=True)))
+  username = property(lambda self: self.user.username)
   get_absolute_url = lambda self: "/p/%s/%s/"%(self.pk,slugify(self.name))
   class Meta:
     ordering = ("-created",)

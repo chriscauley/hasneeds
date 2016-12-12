@@ -2,9 +2,12 @@
   <div class="row">
     <div class="col m6 s12" each={ posts }>
       <div class={ theme.outer }>
-        <div class={ theme.header }><a href="/p/{ id }/{ uR.slugify(name) }/">{ name }</a></div>
         <div class={ theme.content }>
-          <span each={ n in category_names } class="chip blue lighten-2">{ n }</span>
+          <div class="flexy space-between">
+            <a href="/u/{ username }/"><i class="fa fa-slack"> { username }</i></a>
+            <a href="/c/{ n }/" each={ n in category_names } class="chip blue lighten-2">{ n }</a>
+          </div>
+          <div class={ theme.header }><a href="/p/{ id }/{ uR.slugify(name) }/">{ name }</a></div>
           <span each={ n in tag_names } class="chip">{ n }</span>
         </div>
       </div>
@@ -28,16 +31,19 @@
 
 <post-detail>
   <div class={ theme.outer }>
-    <div class={ theme.header }>{ post.name }</div>
     <div class={ theme.content }>
-      <span each={ n in post.category_names } class="chip blue lighten-2">{ n }</span>
+      <div class="flexy space-between">
+        <a href="/u/{ username }/"><i class="fa fa-slack"> { post.username }</i></a>
+        <a href="/c/{ n }/" each={ n in post.category_names } class="chip blue lighten-2">{ n }</a>
+      </div>
+      <div class={ theme.header }>{ post.name }</div>
       <span each={ n in post.tag_names } class="chip">{ n }</span>
       <div>{ post.data.description }</div>
     </div>
   </div>
 
   uR.ajax({
-    url: "/durf/board/post/"+this.opts.matches[1],
+    url: "/durf/board/post/"+this.opts.matches[1]+"/",
     success: function(data) { this.post = data; },
     target: this.root.firstElementChild,
     that: this
