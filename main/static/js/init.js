@@ -4,9 +4,8 @@ uR.auth.login_text = "Connect with Slack";
 
 uR.addRoutes({
   "^/$": function() { uR.mountElement("post-list"); },
-  "/post/new/": function (path,data) {
-    uR.mountElement("new-post")
-  },
+  "^/post/new/%": function (path,data) { uR.mountElement("new-post") },
+  "^/p/(\\d+)/([\\w\\d\\-]+)/$": function(path,data) { uR.mountElement("post-detail",data); console.log(1);}
 });
 
 uR.schema.fields.description = { type: 'textarea' };

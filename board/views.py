@@ -16,7 +16,7 @@ def add_post(request):
     user=request.user,
     name=request.POST['name']
   )
-  post.data['description'] = request.POST['description']
-  post.tags = request.POST['tags']
+  post.data['description'] = request.POST['description'].split(',')
+  post.tags = request.POST['tags'].split(',')
   post.categories = request.POST['categories']
   return JsonResponse({'ur_route_to': post.get_absolute_url()})

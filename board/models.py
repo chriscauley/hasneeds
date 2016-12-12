@@ -12,6 +12,7 @@ class Category(models.Model,JsonMixin):
   name = models.CharField(max_length=64,unique=True)
   json_fields = ['name','id']
   __unicode__ = lambda self: self.name
+  get_absolute_url = lambda self: "/p/%s/%s/"%(self.pk,slugify(self.name))
   class Meta:
     ordering = ("name",)
 
@@ -29,6 +30,7 @@ class Tag(models.Model,JsonMixin):
   approved = models.BooleanField(default=False,help_text=_ht)
   objects = TagManager()
   __unicode__ = lambda self: self.name
+  get_absolute_url = lambda self: "/p/%s/%s/"%(self.pk,slugify(self.name))
   def save(self,*args,**kwargs):
     self.name = slugify(self.name)
     super(Tag,self).save(*args,**kwargs)
@@ -50,6 +52,6 @@ class Post(models.Model,JsonMixin):
   category_ids = property(lambda self: list(self.categories.values_list("id",flat=True)))
   tag_names = property(lambda self: list(self.tags.values_list("name",flat=True)))
   category_names = property(lambda self: list(self.categories.values_list("name",flat=True)))
-  get_absolute_url = lambda self: "/post/%s/%s/"%(self.pk,slugify(self.name))
+  get_absolute_url = lambda self: "/p/%s/%s/"%(self.pk,slugify(self.name))
   class Meta:
     ordering = ("-created",)

@@ -2,9 +2,8 @@
   <div class="row">
     <div class="col m6 s12" each={ posts }>
       <div class={ theme.outer }>
-        <div class={ theme.header }><h4>{ name }</h4></div>
+        <div class={ theme.header }><a href="/p/{ id }/{ uR.slugify(name) }/">{ name }</a></div>
         <div class={ theme.content }>
-          <div>{ data.description }</div>
           <span each={ n in category_names } class="chip blue lighten-2">{ n }</span>
           <span each={ n in tag_names } class="chip">{ n }</span>
         </div>
@@ -26,6 +25,24 @@
     })
   })
 </post-list>
+
+<post-detail>
+  <div class={ theme.outer }>
+    <div class={ theme.header }>{ post.name }</div>
+    <div class={ theme.content }>
+      <span each={ n in post.category_names } class="chip blue lighten-2">{ n }</span>
+      <span each={ n in post.tag_names } class="chip">{ n }</span>
+      <div>{ post.data.description }</div>
+    </div>
+  </div>
+
+  uR.ajax({
+    url: "/durf/board/post/"+this.opts.matches[1],
+    success: function(data) { this.post = data; },
+    target: this.root.firstElementChild,
+    that: this
+  });
+</post-detail>
 
 <new-post>
   <div class={ theme.outer }>
