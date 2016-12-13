@@ -21,7 +21,7 @@
 
   this.on("mount",function() {
     var url = "/durf/board/post/";
-    var matches = window.location.pathname.match(/(c|t)\/([\w\d-]+)/);
+    var matches = this.opts.matches;
     if (matches && matches[1] == 'c') {
       url += "?categories__slug="+matches[2];
       this.title = "Category: "+ matches[2];
