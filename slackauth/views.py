@@ -36,6 +36,9 @@ def set_team(backend, details, response, is_new, user=None, *args, **kwargs):
     social.save()
 
 def not_allowed(request):
+  if request.user.is_authenticated():
+    # otherwise they land on this page after they fail once and then log in for real
+    return HttpResponseRedirect("/")
   return TemplateResponse(request,"slack-domain-not-allowed.html",{})
 
 def slack_redirect(request,username):
