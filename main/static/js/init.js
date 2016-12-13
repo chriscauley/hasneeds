@@ -3,9 +3,9 @@ uR.auth.login_icon = "fa fa-slack";
 uR.auth.login_text = "Connect with Slack";
 
 uR.addRoutes({
-  "^/$": function() { uR.mountElement("post-list"); },
-  "^/post/new/$": function (path,data) { uR.mountElement("new-post") },
-  "^/p/(\\d+)/([\\w\\d\\-]+)/$": function(path,data) { uR.mountElement("post-detail",data); console.log(1);}
+  "^/$": uR.auth.loginRequired("post-list"),
+  "^/post/new/$": uR.auth.loginRequired("new-post"),
+  "^/p/(\\d+)/([\\w\\d\\-]+)/$": uR.auth.loginRequired("post-detail"),
 });
 
 uR.schema.fields.description = { type: 'textarea' };
@@ -30,5 +30,6 @@ uR.schema.new_post = [
 ];
 uR.auth.ready(function() {
   // there's a race condition here where viewing this page directly causes the form to load before this line :(
-  if (uR.auth.user && uR.auth.user.is_superuser) { uR.schema.new_post.push({name:"username",required:False}) }
+  // since it is currently only a hack for me I'm not going to fix it just yet
+  if (uR.auth.user && uR.auth.user.is_superuser) { uR.schema.new_post.push({name:"username",required:false}) }
 })

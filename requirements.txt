@@ -9,3 +9,5 @@ pillow
 python-social-auth
 #graphene-django
 #django-filter
+
+pyquery
