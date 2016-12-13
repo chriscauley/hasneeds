@@ -66,3 +66,20 @@
   ]
   
 </new-post>
+
+<auth-modal>
+  <div class={ theme.outer }>
+    <div class={ theme.header }><h4>Login Required</h4></div>
+    <div class={ theme.content }>
+      <p>This app uses the Indy Hall Slack as a login. Please use the link below to connect your slack account to this app.</p>
+      <a class="btn btn-large btn-blue" href="/login/slack/?next={ window.location.pathname }">
+        <i class="fa fa-slack"></i> Connect with Slack</a>
+    </div>
+  </div>
+
+  <style>
+    auth-modal .card { max-width: 400px; text-align: center; }
+    auth-modal p { margin-bottom: 20px !important; text-align: justify; }
+  </style>
+
+</auth-modal>

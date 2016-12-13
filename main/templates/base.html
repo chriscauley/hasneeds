@@ -32,7 +32,6 @@
     <div id="wrapper">
       <header>
         {% block nav %}{% include "_nav.html" %}{% endblock %}
-        {% block header %}<h1>{% block header_content %}{% endblock %}</h1>{% endblock %}
       </header>
       <div id="wrapper">
         <div class="container">
@@ -53,9 +52,9 @@
   <script src="{{ STATIC_URL }}js/zepto.js"></script>
   <script src="{{ STATIC_URL }}js/zepto-extras.js"></script>
   <script src="{{ STATIC_URL }}js/data.js"></script>
-  <script src="{{ STATIC_URL }}tags/board.tag" type="riot/tag"></script>
   <script>window.jQuery = $;</script>
   <script src="{{ STATIC_URL }}unrest/.dist/unrest-built.js"></script>
+  <script src="{{ STATIC_URL }}tags/board.tag" type="riot/tag"></script>
   <script src="{{ STATIC_URL }}js/init.js"></script>
   {% endcompress %}
 </script>
