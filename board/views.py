@@ -6,12 +6,12 @@ from django.template.defaultfilters import slugify
 from .models import Tag,Post
 
 def tags(request):
-  tags = Tag.objects.filter(name__icontains=slugify(request.GET['q']))
-  return JsonResponse([t.as_json for t in tags],safe=False)
+  tags = Tag.objects.filter(slug__icontains=slugify(request.GET['q']))
+  return JsonResponse([{'name': t.pk,'id': t.pk} for t in tags],safe=False)
 
 def add_tag(request):
-  t,new = Tag.objects.get_or_create(name=request.POST['name'])
-  return JsonResponse(t.as_json)
+  t,new = Tag.objects.get_or_create(slug=request.POST['slug'])
+  return JsonResponse({'name': t.pk,'id': t.pk})
 
 def add_post(request):
   user = request.user
@@ -23,8 +23,8 @@ def add_post(request):
   )
   post.data['description'] = request.POST['description']
   post.data['external_url'] = request.POST['external_url']
-  post.tags = request.POST['tags'].split(',')
-  post.categories = request.POST['categories']
+  post.tags = request.POST['tag_pks'].split(',')
+  post.categories = request.POST['category_pks'].split(',')
   post.render()
   post.save()
   return JsonResponse({'ur_route_to': post.get_absolute_url()})
@@ -34,10 +34,11 @@ def edit_post(request,pk):
   post = get_object_or_404(Post,id=pk)
   if not (post.user == user or request.user.is_superuser):
     raise NotImplementedError()
+  post.name = request.POST['name']
   post.data['description'] = request.POST['description']
   post.data['external_url'] = request.POST['external_url']
-  post.tags = request.POST['tags'].split(',')
-  post.categories = request.POST['categories']
+  post.tags = request.POST['tag_pks'].split(',')
+  post.categories = request.POST['category_pks'].split(',')
   post.render()
   post.save()
   return JsonResponse({'ur_route_to': post.get_absolute_url()})

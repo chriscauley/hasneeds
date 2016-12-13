@@ -16,12 +16,16 @@ def urlify(value):
   return urlfinder2.sub(r' <\1>', value)
 
 class Category(models.Model,JsonMixin):
-  name = models.CharField(max_length=64,unique=True)
-  json_fields = ['name','id']
-  __unicode__ = lambda self: self.name
-  get_absolute_url = lambda self: "/p/%s/%s/"%(self.pk,slugify(self.name))
+  name = models.CharField(max_length=64)
+  slug = models.CharField(max_length=64,primary_key=True)
+  def save(self,*args,**kwargs):
+    if not self.slug:
+      self.slug = slugify(self.name)
+    super(Category,self).save(*args,**kwargs)
+  __unicode__ = lambda self: self.slug
+  get_absolute_url = lambda self: "/t/%s/"%self.slug
   class Meta:
-    ordering = ("name",)
+    ordering = ("slug",)
 
 class TagManager(models.Manager):
   def get(self,*args,**kwargs):
@@ -30,19 +34,18 @@ class TagManager(models.Manager):
     return super(TagManager,self).get(*args,**kwargs)
 
 class Tag(models.Model,JsonMixin):
-  json_fields = ['name','id']
-  name = models.CharField(max_length=64,unique=True)
+  slug = models.CharField(max_length=64,primary_key=True)
   categories = models.ManyToManyField(Category)
   _ht = "Non-approved tags may be deleted if they aren't up to standards."
   approved = models.BooleanField(default=False,help_text=_ht)
   objects = TagManager()
-  __unicode__ = lambda self: self.name
-  get_absolute_url = lambda self: "/p/%s/%s/"%(self.pk,slugify(self.name))
+  __unicode__ = lambda self: self.slug
+  get_absolute_url = lambda self: "/t/%s/"%self.pk
   def save(self,*args,**kwargs):
-    self.name = slugify(self.name)
+    self.slug = slugify(self.slug)
     super(Tag,self).save(*args,**kwargs)
   class Meta:
-    ordering = ("name",)
+    ordering = ("slug",)
 
 class Post(models.Model,JsonMixin):
   name = models.CharField(max_length=256)
@@ -53,13 +56,12 @@ class Post(models.Model,JsonMixin):
   modified = models.DateTimeField(auto_now=True)
   closed = models.DateTimeField(null=True,blank=True)
   data = jsonfield.JSONField(default={})
+  filter_fields = ['categories__slug','tags__slug']
   __unicode__ = lambda self: self.name
 
-  json_fields = ['name','id','tag_ids', 'data', 'category_ids', 'tag_names', 'category_names', 'username']
-  tag_ids = property(lambda self: list(self.tags.values_list("id",flat=True)))
-  category_ids = property(lambda self: list(self.categories.values_list("id",flat=True)))
-  tag_names = property(lambda self: list(self.tags.values_list("name",flat=True)))
-  category_names = property(lambda self: list(self.categories.values_list("name",flat=True)))
+  json_fields = ['name','id', 'data', 'category_pks', 'tag_pks', 'username']
+  tag_pks = property(lambda self: list(self.tags.values_list("pk",flat=True)))
+  category_pks = property(lambda self: list(self.categories.values_list("pk",flat=True)))
   username = property(lambda self: self.user.username)
   get_absolute_url = lambda self: "/p/%s/%s/"%(self.pk,slugify(self.name))
   class Meta:
