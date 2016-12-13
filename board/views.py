@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.http import JsonResponse
 from django.template.defaultfilters import slugify
 
@@ -12,8 +13,11 @@ def add_tag(request):
   return JsonResponse(t.as_json)
 
 def add_post(request):
+  user = request.user
+  if request.user.is_superuser and request.POST.get('username',None):
+    user = get_user_model().objects.get_or_create(username=request.POST['username'])[0]
   post = Post.objects.create(
-    user=request.user,
+    user=user,
     name=request.POST['name']
   )
   post.data['description'] = request.POST['description'].split(',')

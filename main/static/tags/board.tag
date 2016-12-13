@@ -54,7 +54,7 @@
   <div class={ theme.outer }>
     <div class={ theme.header }><h4>New Post</h4></div>
     <div class={ theme.content }>
-      <ur-form schema={ schema } action="/api/board/post/new/" method="POST"></ur-form>
+      <ur-form schema={ uR.schema.new_post } action="/api/board/post/new/" method="POST"></ur-form>
     </div>
   </div>
 
@@ -64,4 +64,5 @@
     'categories',
     'description'
   ]
+  
 </new-post>

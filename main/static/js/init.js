@@ -4,7 +4,7 @@ uR.auth.login_text = "Connect with Slack";
 
 uR.addRoutes({
   "^/$": function() { uR.mountElement("post-list"); },
-  "^/post/new/%": function (path,data) { uR.mountElement("new-post") },
+  "^/post/new/$": function (path,data) { uR.mountElement("new-post") },
   "^/p/(\\d+)/([\\w\\d\\-]+)/$": function(path,data) { uR.mountElement("post-detail",data); console.log(1);}
 });
 
@@ -22,3 +22,13 @@ uR.schema.fields.categories = {
 }
 
 uR.startRouter();
+uR.schema.new_post = [
+  'name',
+  'tags',
+  'categories',
+  'description'
+];
+uR.auth.ready(function() {
+  // there's a race condition here where viewing this page directly causes the form to load before this line :(
+  if (uR.auth.user && uR.auth.user.is_superuser) { uR.schema.new_post.push({name:"username",required:False}) }
+})
