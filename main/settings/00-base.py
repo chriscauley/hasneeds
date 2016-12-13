@@ -101,17 +101,21 @@ SOCIAL_AUTH_PIPELINE = (
   'social.pipeline.social_auth.auth_allowed',
   'social.pipeline.social_auth.social_user',
   'social.pipeline.user.get_username',
-  'slackauth.views.get_team',
+  'slackauth.views.validate_team',
+  'slackauth.views.associate_by_slack_name',
   'social.pipeline.user.create_user',
   'social.pipeline.social_auth.associate_user',
   'social.pipeline.social_auth.load_extra_data',
   'social.pipeline.user.user_details',
+  'slackauth.views.set_team',
 )
 
 ALLOWED_SLACK_DOMAINS = [
   'indyhall',
   #'txrxlabs',
 ]
+
+USERNAME_WITH_TEAM = False
 
 PUBLIC_SETTINGS = ['DEBUG','ALLOWED_SLACK_DOMAINS']
 

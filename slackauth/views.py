@@ -7,25 +7,33 @@ from django.template.response import TemplateResponse
 
 from slackclient import SlackClient
 
-@partial
-def get_team(backend, details, response, is_new=False, *args, **kwargs):
-  if backend.name != 'slack': # not my problem!
+def associate_by_slack_name(backend, details, user=None, *args, **kwargs):
+  """
+  Associate pre-existing users by slack name. Useful for prepopulating data from slack api.
+  Not recommended if multiple slack domains are used.
+  """
+  if user:
     return
-  social = kwargs.get('social') or backend.strategy.storage.user.get_social_auth(backend.name, uid)
-  needs_team = social and not social.extra_data.get("team")
-  if needs_team or is_new:
-    token = response['access_token']
-    sc = SlackClient(token)
-    team = sc.api_call("team.info")['team']
-    if team['domain'] not in settings.ALLOWED_SLACK_DOMAINS:
-      return HttpResponseRedirect("/slack-domain-not-allowed/?domain=%s"%team['domain'])
-    social.set_extra_data({'team': team['domain']})
+  username = details['username']
+  if backend.strategy.storage.user.user_exists(username=username):
+    return {'user':backend.strategy.storage.user.get_user(username=username),'is_new': False}
+
+@partial
+def validate_team(backend, details, response, is_new=False, *args, **kwargs):
+  if backend.name == 'slack' and is_new:
+    domain = response['url'].split("//")[-1].split(".slack.com")[0]
+    if domain not in settings.ALLOWED_SLACK_DOMAINS:
+      return HttpResponseRedirect("/slack-domain-not-allowed/?domain=%s"%domain)
+
+def set_team(backend, details, response, is_new, user=None, *args, **kwargs):
+  if backend.name == 'slack' and not 'team' in kwargs['social'].extra_data:
+    domain = response['url'].split("//")[-1].split(".slack.com")[0]
+    social = kwargs['social']
+    team_keys = ['team','team_name','url']
+    team = {k: response[k] for k in team_keys}
+    team['domain'] = domain
+    social.set_extra_data({"team":team})
     social.save()
-    User = get_user_model()
-    username = details['username'].split("@")[0]
-    if User.objects.filter(username=username):
-      username = details['username']
-    return { 'username': username }
 
 def not_allowed(request):
   return TemplateResponse(request,"slack-domain-not-allowed.html",{})
@@ -33,4 +41,4 @@ def not_allowed(request):
 def slack_redirect(request,username):
   user = get_object_or_404(get_user_model(),username=username)
   team = user.social_auth.filter(provider="slack")[0].extra_data['team']
-  return HttpResponseRedirect("https://%s.slack.com/messages/@%s"%(team,username))
+  return HttpResponseRedirect("%smessages/@%s"%(team['url'],username))
