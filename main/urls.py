@@ -19,7 +19,8 @@ urlpatterns = [
   url(r'^auth/',include(auth_urls)),
 
   url(r'^(|post/new/|post|tag|category)$', lablackey.views.single_page_app),
-  url(r'^(p|t|c)/(\d+)/([\w\d\-]+)/', lablackey.views.single_page_app),
+  url(r'^p/(\d+)/([\w\d\-]+)/', lablackey.views.single_page_app),
+  url(r'^(t|c)/([\w\d\-]+)/', lablackey.views.single_page_app),
   url(r'favicon.ico$', main_views.redirect, {'url': getattr(settings,'FAVICON','/static/favicon.png')}),
   url('', include(social.apps.django_app.urls, namespace='social')),
   url('', include(slackauth.urls)),

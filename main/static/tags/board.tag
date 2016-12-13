@@ -5,10 +5,10 @@
         <div class={ theme.content }>
           <div class="flexy space-between">
             <a href="/u/{ username }/"><i class="fa fa-slack"> { username }</i></a>
-            <a href="/c/{ n }/" each={ n in category_names } class="chip blue lighten-2">{ n }</a>
+            <a href="/c/{ s }/" each={ s in category_pks } class="chip blue lighten-2">{ s }</a>
           </div>
           <div class={ theme.header }><a href="/p/{ id }/{ uR.slugify(name) }/">{ name }</a></div>
-          <span each={ n in tag_names } class="chip">{ n }</span>
+          <a href="/t/{ s }/" each={ s in tag_pks } class="chip">{ s }</a>
         </div>
       </div>
     </div>
@@ -20,8 +20,18 @@
   </div>
 
   this.on("mount",function() {
+    var url = "/durf/board/post/";
+    var matches = window.location.pathname.match(/(c|t)\/([\w\d-]+)/);
+    if (matches && matches[1] == 'c') {
+      url += "?categories__slug="+matches[2];
+      this.title = "Category: "+ matches[2];
+    }
+    if (matches && matches[1] == 't') {
+      url += "?tags__slug="+matches[2];
+      this.title = "Tag: "+ matches[2];
+    }
     uR.ajax({
-      url: "/durf/board/post/",
+      url: url,
       success: function(data) { this.posts = data; },
       that: this,
       target: document.getElementById("content"),
@@ -34,12 +44,18 @@
     <div class={ theme.content }>
       <div class="flexy space-between">
         <a href="/u/{ username }/"><i class="fa fa-slack"> { post.username }</i></a>
-        <a href="/c/{ n }/" each={ n in post.category_names } class="chip blue lighten-2">{ n }</a>
+        <a href="/c/{ s }/" each={ s in post.category_pks } class="chip blue lighten-2">{ s }</a>
       </div>
       <div class={ theme.header }>
         <a href="/p/{ post.id }/{ uR.slugify(post.name) }/edit/" if={ can_edit } class="fa fa-edit"></a>
-        { post.name }</div>
-      <span each={ n in post.tag_names } class="chip">{ n }</span>
+        { post.name }
+      </div>
+      <a href="/t/{ s }/" each={ s in post.tag_pks } class="chip">{ s }</a>
+      <div if={ post.data.external_url }>
+        <a href={ post.data.external_url } target="_blank">
+          <i class="fa fa-external"></i> { post.data.external_url }
+        </a>
+      </div>
       <div class="description"></div>
     </div>
   </div>
@@ -90,6 +106,7 @@
   this.on("mount",function() {
     uR.auth.ready(function() {
       if (uR.auth.user.is_superuser && !uR.added_superuser) {
+        opts.post.category_pks = opts.post.category_pks[0];
         uR.added_superuser = true;
         uR.schema.new_post.push({name:"username",required:false});
         self.mount();
@@ -113,4 +130,7 @@
     auth-modal p { margin-bottom: 20px !important; text-align: justify; }
   </style>
 
+  this.on("update",function() {
+    if (uR.auth.user) { uR.route(window.location.pathname); this.unmount();riot.mount("auth-dropdown") }
+  });
 </auth-modal>

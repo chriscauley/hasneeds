@@ -5,6 +5,7 @@ uR.auth.login_text = "Connect with Slack";
 uR.addRoutes({
   "^/$": uR.auth.loginRequired("post-list"),
   "^/post/new/$": uR.auth.loginRequired("new-post"),
+  "^/(c|t)/([\\w\\d\\-]+)/$": uR.auth.loginRequired("post-list"),
   "^/p/(\\d+)/([\\w\\d\\-]+)/$": uR.auth.loginRequired("post-detail"),
   "^/p/(\\d+)/([\\w\\d\\-]+)/edit/$": uR.auth.loginRequired(function(path,opts) {
     uR.ajax({
@@ -20,15 +21,16 @@ uR.addRoutes({
 });
 
 uR.schema.fields.description = { type: 'textarea' };
-uR.schema.fields.tags = {
+uR.schema.fields.tag_pks = {
+  label: "Tags",
   type: 'token-input',
   library: "/api/board/tags/",
 }
-uR.schema.fields.categories = {
+uR.schema.fields.category_pks = {
   type: 'select',
   choices_url: "/durf/board/category/",
-  value_key: 'id',
-  verbose_key: 'name',
+  value_key: 'pk',
+  verbose_key: 'pk',
   placeholder: 'Select Category',
 }
 
@@ -36,7 +38,7 @@ uR.startRouter();
 uR.schema.new_post = [
   { name: 'external_url', required: false, help_text: "Optional, this will hepl to populate the rest of the fields" },
   'name',
-  'tags',
-  'categories',
+  'tag_pks',
+  'category_pks',
   'description',
 ];
