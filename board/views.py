@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
 
 from .models import Tag,Post
@@ -20,7 +21,23 @@ def add_post(request):
     user=user,
     name=request.POST['name']
   )
-  post.data['description'] = request.POST['description'].split(',')
+  post.data['description'] = request.POST['description']
+  post.data['external_url'] = request.POST['external_url']
   post.tags = request.POST['tags'].split(',')
   post.categories = request.POST['categories']
+  post.render()
+  post.save()
+  return JsonResponse({'ur_route_to': post.get_absolute_url()})
+
+def edit_post(request,pk):
+  user = request.user
+  post = get_object_or_404(Post,id=pk)
+  if not (post.user == user or request.user.is_superuser):
+    raise NotImplementedError()
+  post.data['description'] = request.POST['description']
+  post.data['external_url'] = request.POST['external_url']
+  post.tags = request.POST['tags'].split(',')
+  post.categories = request.POST['categories']
+  post.render()
+  post.save()
   return JsonResponse({'ur_route_to': post.get_absolute_url()})

@@ -6,6 +6,17 @@ uR.addRoutes({
   "^/$": uR.auth.loginRequired("post-list"),
   "^/post/new/$": uR.auth.loginRequired("new-post"),
   "^/p/(\\d+)/([\\w\\d\\-]+)/$": uR.auth.loginRequired("post-detail"),
+  "^/p/(\\d+)/([\\w\\d\\-]+)/edit/$": uR.auth.loginRequired(function(path,opts) {
+    uR.ajax({
+      url: "/durf/board/post/"+opts.matches[1]+"/",
+      success: function(data) {
+        opts.post = data;
+        opts.post.external_url = data.data.external_url;
+        opts.post.description = data.data.description;
+        uR.mountElement("edit-post",opts);
+      },
+    });
+  }),
 });
 
 uR.schema.fields.description = { type: 'textarea' };
@@ -23,13 +34,9 @@ uR.schema.fields.categories = {
 
 uR.startRouter();
 uR.schema.new_post = [
+  { name: 'external_url', required: false, help_text: "Optional, this will hepl to populate the rest of the fields" },
   'name',
   'tags',
   'categories',
-  'description'
+  'description',
 ];
-uR.auth.ready(function() {
-  // there's a race condition here where viewing this page directly causes the form to load before this line :(
-  // since it is currently only a hack for me I'm not going to fix it just yet
-  if (uR.auth.user && uR.auth.user.is_superuser) { uR.schema.new_post.push({name:"username",required:false}) }
-})

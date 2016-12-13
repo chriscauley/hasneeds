@@ -27,6 +27,7 @@ urlpatterns = [
   url('^api/board/tags/$',board.views.tags),
   url('^api/board/tag/new/$',board.views.add_tag),
   url('^api/board/post/new/$',board.views.add_post),
+  url('^api/board/post/edit/(\d+)/$',board.views.edit_post),
 ]
 
 if settings.DEBUG:

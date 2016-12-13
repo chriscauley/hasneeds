@@ -36,15 +36,21 @@
         <a href="/u/{ username }/"><i class="fa fa-slack"> { post.username }</i></a>
         <a href="/c/{ n }/" each={ n in post.category_names } class="chip blue lighten-2">{ n }</a>
       </div>
-      <div class={ theme.header }>{ post.name }</div>
+      <div class={ theme.header }>
+        <a href="/p/{ post.id }/{ uR.slugify(post.name) }/edit/" if={ can_edit } class="fa fa-edit"></a>
+        { post.name }</div>
       <span each={ n in post.tag_names } class="chip">{ n }</span>
-      <div>{ post.data.description }</div>
+      <div class="description"></div>
     </div>
   </div>
 
   uR.ajax({
     url: "/durf/board/post/"+this.opts.matches[1]+"/",
-    success: function(data) { this.post = data; },
+    success: function(data) {
+      this.post = data;
+      this.root.querySelector(".description").innerHTML = this.post.data.rendered;
+      this.can_edit = uR.auth.user.username == data.username || uR.auth.user.is_superuser;
+    },
     target: this.root.firstElementChild,
     that: this
   });
@@ -54,18 +60,43 @@
   <div class={ theme.outer }>
     <div class={ theme.header }><h4>New Post</h4></div>
     <div class={ theme.content }>
-      <ur-form schema={ uR.schema.new_post } action="/api/board/post/new/" method="POST"></ur-form>
+      <ur-form schema={ opts.schema || uR.schema.new_post } action="/api/board/post/new/" method="POST"></ur-form>
     </div>
   </div>
 
-  schema = [
-    'name',
-    'tags',
-    'categories',
-    'description'
-  ]
-  
+
+  var self = this;
+  this.on("mount",function() {
+    uR.auth.ready(function() {
+      if (uR.auth.user.is_superuser && !self.opts.schema) {
+        self.opts.schema = uR.schema.new_post.slice()
+        self.opts.schema.push({name:"username",required:false});
+        self.mount();
+      }
+    });
+  })
 </new-post>
+
+<edit-post>
+  <div class={ theme.outer }>
+    <div class={ theme.header }><h4>Edit Post</h4></div>
+    <div class={ theme.content }>
+      <ur-form schema={ uR.schema.new_post } action="/api/board/post/edit/{ opts.post.id }/" method="POST"
+               initial={ opts.post }></ur-form>
+    </div>
+  </div>
+
+  var self = this;
+  this.on("mount",function() {
+    uR.auth.ready(function() {
+      if (uR.auth.user.is_superuser && !uR.added_superuser) {
+        uR.added_superuser = true;
+        uR.schema.new_post.push({name:"username",required:false});
+        self.mount();
+      }
+    });
+  })
+</edit-post>
 
 <auth-modal>
   <div class={ theme.outer }>
