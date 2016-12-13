@@ -4,9 +4,16 @@ from django.conf import settings
 from django.db import models
 from django.template.defaultfilters import slugify
 
-import jsonfield
+import jsonfield, markdown, re
 
 from lablackey.unrest import JsonMixin
+
+urlfinder = re.compile('^(http:\/\/\S+)')
+urlfinder2 = re.compile('\s(http:\/\/\S+)')
+
+def urlify(value):
+  value = urlfinder.sub(r'<\1>', value)
+  return urlfinder2.sub(r' <\1>', value)
 
 class Category(models.Model,JsonMixin):
   name = models.CharField(max_length=64,unique=True)
@@ -57,3 +64,6 @@ class Post(models.Model,JsonMixin):
   get_absolute_url = lambda self: "/p/%s/%s/"%(self.pk,slugify(self.name))
   class Meta:
     ordering = ("-created",)
+  def render(self):
+    self.data['rendered'] = markdown.markdown(urlify(self.data['description']))
+
