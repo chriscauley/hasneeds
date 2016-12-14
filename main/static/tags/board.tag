@@ -5,7 +5,11 @@
         <div class={ theme.content }>
           <div class="flexy space-between">
             <a href="/u/{ username }/"><i class="fa fa-slack"> { username }</i></a>
-            <a href="/c/{ s }/" each={ s in category_pks } class="chip blue lighten-2">{ s }</a>
+            <div>
+              <a href="?has_needs={ has_needs }" class="chip { (has_needs=='has')?'green':'orange' }">
+                { has_needs }</a>
+              <a href="/c/{ s }/" each={ s in category_pks } class="chip blue lighten-2">{ s }</a>
+            </div>
           </div>
           <div class={ theme.header }><a href="/p/{ id }/{ uR.slugify(name) }/">{ name }</a></div>
           <a href="/t/{ s }/" each={ s in tag_pks } class="chip">{ s }</a>
@@ -20,16 +24,18 @@
   </div>
 
   this.on("mount",function() {
-    var url = "/durf/board/post/";
+    var url = "/durf/board/post/?";
     var matches = this.opts.matches;
     if (matches && matches[1] == 'c') {
-      url += "?categories__slug="+matches[2];
+      url += "categories__slug="+matches[2];
       this.title = "Category: "+ matches[2];
     }
     if (matches && matches[1] == 't') {
-      url += "?tags__slug="+matches[2];
+      url += "tags__slug="+matches[2];
       this.title = "Tag: "+ matches[2];
     }
+    var has_needs = uR.getQueryParameter("has_needs" || this.opts.location.search || "?");
+    if (has_needs) { url+= "&has_needs=" + has_needs; }
     uR.ajax({
       url: url,
       success: function(data) { this.posts = data; },
@@ -44,7 +50,11 @@
     <div class={ theme.content }>
       <div class="flexy space-between">
         <a href="/u/{ username }/"><i class="fa fa-slack"> { post.username }</i></a>
-        <a href="/c/{ s }/" each={ s in post.category_pks } class="chip blue lighten-2">{ s }</a>
+        <div>
+          <a href="/?has_needs={ has_needs }" class="chip { (has_needs=='has')?'green':'orange' }">
+            { has_needs }</a>
+          <a href="/c/{ s }/" each={ s in post.category_pks } class="chip blue lighten-2">{ s }</a>
+        </div>
       </div>
       <div class={ theme.header }>
         <a href="/p/{ post.id }/{ uR.slugify(post.name) }/edit/" if={ can_edit } class="fa fa-edit"></a>

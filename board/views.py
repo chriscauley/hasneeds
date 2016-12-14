@@ -17,10 +17,9 @@ def add_post(request):
   user = request.user
   if request.user.is_superuser and request.POST.get('username',None):
     user = get_user_model().objects.get_or_create(username=request.POST['username'])[0]
-  post = Post.objects.create(
-    user=user,
-    name=request.POST['name']
-  )
+  post = Post(user=user)
+  post.name=request.POST['name']
+  post.has_needs=request.POST['has_needs']
   post.data['description'] = request.POST['description']
   post.data['external_url'] = request.POST['external_url']
   post.tags = request.POST['tag_pks'].split(',')
@@ -35,6 +34,7 @@ def edit_post(request,pk):
   if not (post.user == user or request.user.is_superuser):
     raise NotImplementedError()
   post.name = request.POST['name']
+  post.has_needs=request.POST['has_needs']
   post.data['description'] = request.POST['description']
   post.data['external_url'] = request.POST['external_url']
   post.tags = request.POST['tag_pks'].split(',')

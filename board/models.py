@@ -47,6 +47,11 @@ class Tag(models.Model,JsonMixin):
   class Meta:
     ordering = ("slug",)
 
+HAS_NEEDS_CHOICES = [
+  ('has', 'I have...'),
+  ('needs', 'I need...')
+]
+
 class Post(models.Model,JsonMixin):
   name = models.CharField(max_length=256)
   tags = models.ManyToManyField(Tag)
@@ -56,10 +61,11 @@ class Post(models.Model,JsonMixin):
   modified = models.DateTimeField(auto_now=True)
   closed = models.DateTimeField(null=True,blank=True)
   data = jsonfield.JSONField(default={})
-  filter_fields = ['categories__slug','tags__slug']
+  has_needs = models.CharField(max_length=8,choices=HAS_NEEDS_CHOICES,default="has")
+  filter_fields = ['categories__slug', 'tags__slug', 'has_needs']
   __unicode__ = lambda self: self.name
 
-  json_fields = ['name','id', 'data', 'category_pks', 'tag_pks', 'username']
+  json_fields = ['name','id', 'data', 'category_pks', 'tag_pks', 'username', 'has_needs']
   tag_pks = property(lambda self: list(self.tags.values_list("pk",flat=True)))
   category_pks = property(lambda self: list(self.categories.values_list("pk",flat=True)))
   username = property(lambda self: self.user.username)

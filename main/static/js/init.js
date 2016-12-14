@@ -34,11 +34,17 @@ uR.schema.fields.category_pks = {
   placeholder: 'Select Category',
 }
 
+uR.schema.fields.has_needs = {
+  'type': 'select',
+  'choice_tuples': [['has', 'I has...'],['needs', 'I needs...']],
+}
+
 uR.startRouter();
 uR.schema.new_post = [
   { name: 'external_url', required: false, help_text: "Optional, this will hepl to populate the rest of the fields" },
   'name',
   'tag_pks',
+  'has_needs',
   'category_pks',
   'description',
 ];
