@@ -51,8 +51,8 @@
       <div class="flexy space-between">
         <a href="/u/{ username }/"><i class="fa fa-slack"> { post.username }</i></a>
         <div>
-          <a href="/?has_needs={ has_needs }" class="chip { (has_needs=='has')?'green':'orange' }">
-            { has_needs }</a>
+          <a href="/?has_needs={ post.has_needs }" class="chip { (post.has_needs=='has')?'green':'orange' }">
+            { post.has_needs }</a>
           <a href="/c/{ s }/" each={ s in post.category_pks } class="chip blue lighten-2">{ s }</a>
         </div>
       </div>

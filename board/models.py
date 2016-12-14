@@ -62,10 +62,11 @@ class Post(models.Model,JsonMixin):
   closed = models.DateTimeField(null=True,blank=True)
   data = jsonfield.JSONField(default={})
   has_needs = models.CharField(max_length=8,choices=HAS_NEEDS_CHOICES,default="has")
-  filter_fields = ['categories__slug', 'tags__slug', 'has_needs']
   __unicode__ = lambda self: self.name
 
   json_fields = ['name','id', 'data', 'category_pks', 'tag_pks', 'username', 'has_needs']
+  data_fields = ['description','external_url']
+  filter_fields = ['categories__slug', 'tags__slug', 'has_needs']
   tag_pks = property(lambda self: list(self.tags.values_list("pk",flat=True)))
   category_pks = property(lambda self: list(self.categories.values_list("pk",flat=True)))
   username = property(lambda self: self.user.username)
