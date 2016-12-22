@@ -107,8 +107,8 @@
   <div class={ theme.outer }>
     <div class={ theme.header }><h4>Edit Post</h4></div>
     <div class={ theme.content }>
-      <ur-form schema={ uR.schema.new_post } action="/api/board/post/edit/{ opts.post.id }/" method="POST"
-               initial={ opts.post }></ur-form>
+      <ur-form schema={ opts.schema || uR.schema.new_post } initial={ opts.post }
+               action="/api/board/post/edit/{ opts.post.id }/" method="POST"></ur-form>
     </div>
   </div>
 
@@ -118,7 +118,8 @@
       if (uR.auth.user.is_superuser && !uR.added_superuser) {
         opts.post.category_pks = opts.post.category_pks[0];
         uR.added_superuser = true;
-        uR.schema.new_post.push({name:"username",required:false});
+        self.opts.schema = uR.schema.new_post.slice()
+        self.opts.schema.push({name:"username",required:false});
         self.mount();
       }
     });
