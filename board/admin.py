@@ -4,7 +4,7 @@ from models import Category, Tag, Post
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-  pass
+  exclude = ("slug",)
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):

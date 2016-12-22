@@ -20,7 +20,7 @@ uR.addRoutes({
   }),
 });
 
-uR.schema.fields.description = { type: 'textarea' };
+uR.schema.fields.description = { type: 'textarea', required: false };
 uR.schema.fields.tag_pks = {
   label: "Tags",
   type: 'token-input',
