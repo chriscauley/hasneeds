@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
+from lablackey.decorators import auth_required
 
 from .models import Tag,Post
 
@@ -34,3 +35,11 @@ def post_post(request,pk=None):
   post.render()
   post.save()
   return JsonResponse({'ur_route_to': post.get_absolute_url()})
+
+@auth_required
+def delete_post(request,pk):
+  post = Post.objects.get(pk=pk)
+  if not (post.user == request.user or request.user.is_superuser):
+    raise NotImplementedError()
+  post.delete()
+  return JsonResponse({})

@@ -41,7 +41,8 @@ uR.schema.fields.has_needs = {
 
 uR.startRouter();
 uR.schema.new_post = [
-  { name: 'external_url', required: false, help_text: "Optional, this will hepl to populate the rest of the fields" },
+  { name: 'external_url', required: false,
+    help_text: "Optional, this will hepl to populate the rest of the fields" },
   'name',
   'tag_pks',
   'has_needs',

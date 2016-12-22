@@ -105,7 +105,10 @@
 
 <edit-post>
   <div class={ theme.outer }>
-    <div class={ theme.header }><h4>Edit Post</h4></div>
+    <div class={ theme.header }><h4>
+        Edit Post
+        <i class="right fa fa-trash" onclick={ delete }></i>
+    </h4></div>
     <div class={ theme.content }>
       <ur-form schema={ opts.schema || uR.schema.new_post } initial={ opts.post }
                action="/api/board/post/edit/{ opts.post.id }/" method="POST"></ur-form>
@@ -124,6 +127,18 @@
       }
     });
   })
+  delete(e) {
+    uR.confirm("Are you sure you want to delete this?",function() {
+      uR.ajax({
+        url: `/api/board/post/delete/${opts.post.id}`,
+        method: "DELETE",
+        success: function(data) {
+          uR.alert("This post has been deleted");
+          uR.route("/");
+        }
+      });
+    });
+  }
 </edit-post>
 
 <auth-modal>
