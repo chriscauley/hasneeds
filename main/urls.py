@@ -9,6 +9,7 @@ from main import views as main_views
 import social.apps.django_app.urls
 import slackauth.urls
 import lablackey.urls, lablackey.views
+import unrest_comments.urls
 
 import board.views
 
@@ -25,6 +26,7 @@ urlpatterns = [
   url('', include(social.apps.django_app.urls, namespace='social')),
   url('', include(slackauth.urls)),
   url('', include(lablackey.urls)),
+  url(r'^comments/', include(unrest_comments.urls)),
   url('^api/board/tags/$',board.views.tags),
   url('^api/board/tag/new/$',board.views.add_tag),
   url('^api/board/post/new/$',board.views.post_post),

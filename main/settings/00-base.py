@@ -119,6 +119,4 @@ USERNAME_WITH_TEAM = False
 
 PUBLIC_SETTINGS = ['DEBUG','ALLOWED_SLACK_DOMAINS']
 
-#GRAPHENE = {
-#    'SCHEMA': 'board.schema.schema',
-#}
+COMMENTS_APP = 'unrest_comments'

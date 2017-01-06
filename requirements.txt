@@ -11,3 +11,6 @@ python-social-auth
 #django-filter
 
 pyquery
+
+django_comments
+django_mptt

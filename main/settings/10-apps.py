@@ -9,6 +9,12 @@ INSTALLED_APPS = (
   'django.contrib.messages',
   'django.contrib.staticfiles',
 
+  # unrest_comments
+  'django_comments',
+  'mptt',
+  'unrest_comments',
+  'django.contrib.sites',
+
   #'graphene_django',
   'compressor',
   'crop_override',

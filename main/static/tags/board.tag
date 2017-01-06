@@ -74,8 +74,9 @@
     url: "/durf/board/post/"+this.opts.matches[1]+"/",
     success: function(data) {
       this.post = data;
-      this.root.querySelector(".description").innerHTML = this.post.data.rendered;
+      this.root.querySelector(".description").innerHTML = this.post.data.rendered+"<comment-list></comment-list>";
       this.can_edit = uR.auth.user.username == data.username || uR.auth.user.is_superuser;
+      riot.mount("comment-list",{object_pk:data.id, content_type:'board.post'});
     },
     target: this.root.firstElementChild,
     that: this
