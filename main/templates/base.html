@@ -15,7 +15,8 @@
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/_materialize.css" />
     <link rel="stylesheet" type="text/less" href="{{ STATIC_URL }}less/base.less" />
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}unrest/.dist/unrest-built.css" />
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}.dist/unrest_comments.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}unrest/.dist/token-built.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}unrest_comments/.dist/unrest_comments.css" />
     {% endcompress %}
 
     <!--[if IE 7]>
@@ -55,9 +56,10 @@
   <script src="{{ STATIC_URL }}js/data.js"></script>
   <script>window.jQuery = $;</script>
   <script src="{{ STATIC_URL }}unrest/.dist/unrest-built.js"></script>
+  <script src="{{ STATIC_URL }}unrest/.dist/token-built.js"></script>
   <script src="{{ STATIC_URL }}tags/board.tag" type="riot/tag"></script>
   <script src="{{ STATIC_URL }}js/init.js"></script>
-  <script src="{{ STATIC_URL }}.dist/unrest_comments.js"></script>
+  <script src="{{ STATIC_URL }}unrest_comments/.dist/unrest_comments.js"></script>
   {% endcompress %}
 </script>
 {% csrf_token %}
