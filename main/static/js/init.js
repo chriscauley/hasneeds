@@ -31,7 +31,7 @@ uR.schema.fields.category_pks = {
   choices_url: "/durf/board/category/",
   value_key: 'pk',
   verbose_key: 'pk',
-  placeholder: 'Select Category',
+  label: 'Select Category',
 }
 
 uR.schema.fields.has_needs = {
@@ -42,7 +42,24 @@ uR.schema.fields.has_needs = {
 uR.startRouter();
 uR.schema.new_post = [
   { name: 'external_url', required: false,
-    help_text: "Optional, this will hepl to populate the rest of the fields" },
+    help_text: "Optional, this will hepl to populate the rest of the fields",
+    keyUp: function(value) {
+      if (!value || this.last_url == value) { return }
+      this.last_url = value;
+      uR.ajax({
+        url: "/load-meta-data/",
+        data: {url:value},
+        success: function(data) {
+          var card = document.createElement("url-card");
+          this.root.appendChild(card);
+          riot.mount("url-card",{meta:data,parent:this});
+        },
+        that: this,
+        target: this.root
+      });
+    },
+    bounce: 500
+  },
   'name',
   'tag_pks',
   'has_needs',

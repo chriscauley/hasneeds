@@ -22,6 +22,7 @@ INSTALLED_APPS = (
   'social.apps.django_app.default',
 
   'lablackey',
+  'magic_card',
 
   'slackauth',
   'board',
