@@ -6,11 +6,13 @@ from lablackey.decorators import auth_required
 
 from .models import Tag,Post
 
+import arrow
+
 def tags(request):
   tags = Tag.objects.filter(slug__icontains=slugify(request.GET['q']))
   return JsonResponse([{'name': t.pk,'id': t.pk} for t in tags],safe=False)
 
-def add_tag(request):
+def add_tag(nrequest):
   t,new = Tag.objects.get_or_create(slug=request.POST['slug'])
   return JsonResponse({'name': t.pk,'id': t.pk})
 
@@ -24,9 +26,11 @@ def post_post(request,pk=None):
       raise NotImplementedError()
   else:
     post = Post()
-  post.user=user
+  post.user = user
   post.name = request.POST['name']
-  post.has_needs=request.POST['has_needs']
+  post.has_needs = request.POST['has_needs']
+  if request.POST.get("closed"):
+    post.closed = arrow.get(request.POST['closed'],"MM-DD-YYYY HH:mm").datetime
   post.save()
   post.tags = request.POST['tag_pks'].split(',')
   post.categories = request.POST['category_pks'].split(',')

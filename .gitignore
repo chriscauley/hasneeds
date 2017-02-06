@@ -12,3 +12,6 @@ main/settings/local.py
 env/*
 .e/*
 .dev
+
+node_modules
+yarn*

@@ -67,6 +67,7 @@
         </a>
       </div>
       <div class="description"></div>
+      <comment-list></comment-list>
     </div>
   </div>
 
@@ -74,7 +75,7 @@
     url: "/durf/board/post/"+this.opts.matches[1]+"/",
     success: function(data) {
       this.post = data;
-      this.root.querySelector(".description").innerHTML = this.post.data.rendered+"<comment-list></comment-list>";
+      this.root.querySelector(".description").innerHTML = this.post.data.rendered;
       this.can_edit = uR.auth.user.username == data.username || uR.auth.user.is_superuser;
       riot.mount("comment-list",{object_pk:data.id, content_type:'board.post'});
     },

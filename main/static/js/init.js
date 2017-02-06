@@ -39,11 +39,16 @@ uR.schema.fields.has_needs = {
   'choice_tuples': [['has', 'I has...'],['needs', 'I needs...']],
 }
 
+uR.schema.fields.closed = {
+  'type': 'ur-datetime',
+  'help_text': 'Set to a futture date to have this automatically close (eg when a job posting expires or an event ends).',
+};
+
 uR.startRouter();
 uR.schema.new_post = [
   { name: 'external_url', required: false,
     help_text: "Optional, this will hepl to populate the rest of the fields",
-    keyUp: function(value) {
+    /*keyUp: function(value) {
       if (!value || this.last_url == value) { return }
       this.last_url = value;
       uR.ajax({
@@ -59,10 +64,12 @@ uR.schema.new_post = [
       });
     },
     bounce: 500
+    */
   },
   'name',
   'tag_pks',
   'has_needs',
   'category_pks',
   'description',
+  'closed',
 ];

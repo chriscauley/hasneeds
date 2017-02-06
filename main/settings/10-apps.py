@@ -14,6 +14,7 @@ INSTALLED_APPS = (
   'mptt',
   'unrest_comments',
   'django.contrib.sites',
+  'emoji',
 
   #'graphene_django',
   'compressor',
