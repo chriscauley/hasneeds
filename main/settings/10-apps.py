@@ -26,6 +26,7 @@ INSTALLED_APPS = (
   'magic_card',
 
   'slackauth',
+  'slackarchive',
   'board',
 )
 

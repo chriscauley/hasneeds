@@ -47,7 +47,7 @@ AUTHENTICATION_BACKENDS = (
   'django.contrib.auth.backends.ModelBackend',
 )
 
-SOCIAL_AUTH_SLACK_SCOPE = ['team:read']
+SOCIAL_AUTH_SLACK_SCOPE = ['team:read','channels:history','channels:read']
 
 # Above comments are useful for social auth. Requires these keys in a private file
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ""
