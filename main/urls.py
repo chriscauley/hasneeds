@@ -11,6 +11,7 @@ import slackauth.urls
 import magic_card.urls
 import lablackey.urls, lablackey.views
 import unrest_comments.urls
+from slackarchive.views import random_message
 
 import board.views
 
@@ -29,11 +30,12 @@ urlpatterns = [
   url('', include(lablackey.urls)),
   url('', include(magic_card.urls)),
   url(r'^comments/', include(unrest_comments.urls)),
-  url('^api/board/tags/$',board.views.tags),
-  url('^api/board/tag/new/$',board.views.add_tag),
-  url('^api/board/post/new/$',board.views.post_post),
-  url('^api/board/post/delete/(\d+)/$',board.views.delete_post),
-  url('^api/board/post/edit/(\d+)/$',board.views.post_post),
+  url(r'^api/board/tags/$',board.views.tags),
+  url(r'^api/board/tag/new/$',board.views.add_tag),
+  url(r'^api/board/post/new/$',board.views.post_post),
+  url(r'^api/board/post/delete/(\d+)/$',board.views.delete_post),
+  url(r'^api/board/post/edit/(\d+)/$',board.views.post_post),
+  url(r'rando/',random_message),
 ]
 
 if settings.DEBUG:

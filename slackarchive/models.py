@@ -2,6 +2,9 @@ from django.conf import settings
 from django.db import models
 
 from jsonfield import JSONField
+from lablackey.sms.var import random_voice
+
+import re
 
 class SlackObject(models.Model):
   id = models.CharField(max_length=12,primary_key=True)
@@ -34,3 +37,17 @@ class SlackMessage(models.Model):
   def ninja_add(clss,json,channel):
     slackuser = SlackUser.objects.get_or_create(id=json['user'])[0]
     obj,new = clss.objects.get_or_create(channel=channel,ts=json['ts'],slackuser=slackuser)
+    obj.data = json
+    obj.save()
+  def lines(self):
+    x = self.data
+    text = re.sub("\s+"," ",self.data['text'])
+    quote_tag = '"'
+    if text.startswith("'"):
+      quote_tag = "'"
+    lines = text.split(quote_tag+" "+quote_tag)
+    out = []
+    for line in lines:
+      v,l = random_voice()
+      out.append([line.replace(quote_tag,""),v,l])
+    return out
